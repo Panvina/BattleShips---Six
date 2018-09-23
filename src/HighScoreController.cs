@@ -18,7 +18,7 @@ namespace Battleships
 {
     static class HighScoreController
     {
-        private const int NAME_WIDTH = 3;
+        private const int NAME_WIDTH = 15;
 
         private const int SCORES_LEFT = 490;
         /// <summary>
@@ -58,7 +58,7 @@ namespace Battleships
         /// <remarks>
         /// The format is
         /// # of scores
-        /// NNNSSS
+        /// SSSNNNN
         /// 
         /// Where NNN is the name and SSS is the score
         /// </remarks>
@@ -85,8 +85,13 @@ namespace Battleships
 
                 line = input.ReadLine();
 
-                s.Name = line.Substring(0, NAME_WIDTH);
-                s.Value = Convert.ToInt32(line.Substring(NAME_WIDTH));
+                s.Name = line.Substring(3);
+                if (s.Name.Length < 15)
+                {
+                    s.Name = s.Name + new string(Convert.ToChar(" "), 15 - s.Name.Length);
+                }
+                s.Value = Convert.ToInt32(line.Substring(0,3));
+                
                 _Scores.Add(s);
             }
             input.Close();
@@ -114,7 +119,8 @@ namespace Battleships
 
             foreach (Score s in _Scores)
             {
-                output.WriteLine(s.Name + s.Value);
+                output.WriteLine(s.Value.ToString("D3") + s.Name);
+    
             }
 
             output.Close();
@@ -193,7 +199,7 @@ namespace Battleships
                 int x = 0;
                 x = SCORES_LEFT + SwinGame.TextWidth(GameResources.GameFont("Courier"), "Name: ");
 
-                SwinGame.StartReadingText(Color.White, NAME_WIDTH, GameResources.GameFont("Courier"), x, ENTRY_TOP);
+                SwinGame.StartReadingTextWithText("Maximum 15 char", Color.White, NAME_WIDTH, GameResources.GameFont("Courier"), x, ENTRY_TOP);
 
                 //Read the text from the user
                 while (SwinGame.ReadingText())
@@ -208,15 +214,12 @@ namespace Battleships
 
                 s.Name = SwinGame.TextReadAsASCII();
 
-                if (s.Name.Length < 3)
-                {
-                    s.Name = s.Name + new string(Convert.ToChar(" "), 3 - s.Name.Length);
-                }
+               
 
                 _Scores.RemoveAt(_Scores.Count - 1);
                 _Scores.Add(s);
                 _Scores.Sort();
-
+                SaveScores();
                 GameController.EndCurrentState();
             }
         }

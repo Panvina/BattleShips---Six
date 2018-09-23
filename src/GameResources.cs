@@ -19,7 +19,7 @@ namespace Battleships
             NewFont("CourierSmall", "cour.ttf", 8);
             NewFont("Menu", "ffaccess.ttf", 8);
         }
-
+            
         private static void LoadImages()
         {
             //Backgrounds
