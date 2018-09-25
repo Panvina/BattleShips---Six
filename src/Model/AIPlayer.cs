@@ -22,7 +22,6 @@ namespace Battleships
         protected class Location
         {
             private int _Row;
-
             private int _Column;
             /// <summary>
             /// The row of the shot

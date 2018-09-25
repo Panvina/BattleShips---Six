@@ -24,7 +24,6 @@ namespace Battleships
         protected class Target
         {
             private readonly Location _ShotAt;
-
             private readonly Location _Source;
             /// <summary>
             /// The target shot at
