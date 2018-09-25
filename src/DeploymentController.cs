@@ -37,6 +37,8 @@ namespace Battleships
 
         private const int TEXT_OFFSET = 5;
         private static Direction _currentDirection = Direction.UpDown;
+        private static int _currentRow = 0;
+        private static int _currentCol = 0;
 
         private static ShipName _selectedShip = ShipName.Tug;
         /// <summary>
@@ -58,10 +60,12 @@ namespace Battleships
             if (SwinGame.KeyTyped(KeyCode.UpKey) | SwinGame.KeyTyped(KeyCode.DownKey))
             {
                 _currentDirection = Direction.UpDown;
+                DeployShips();
             }
             if (SwinGame.KeyTyped(KeyCode.LeftKey) | SwinGame.KeyTyped(KeyCode.RightKey))
             {
                 _currentDirection = Direction.LeftRight;
+                DeployShips();
             }
 
             if (SwinGame.KeyTyped(KeyCode.RKey))
@@ -88,11 +92,14 @@ namespace Battleships
                 }
                 else if (UtilityFunctions.IsMouseInRectangle(UP_DOWN_BUTTON_LEFT, TOP_BUTTONS_TOP, DIR_BUTTONS_WIDTH, TOP_BUTTONS_HEIGHT))
                 {
-                    _currentDirection = Direction.LeftRight;
+                    _currentDirection = Direction.UpDown;
+                    DeployShips();
+
                 }
                 else if (UtilityFunctions.IsMouseInRectangle(LEFT_RIGHT_BUTTON_LEFT, TOP_BUTTONS_TOP, DIR_BUTTONS_WIDTH, TOP_BUTTONS_HEIGHT))
                 {
                     _currentDirection = Direction.LeftRight;
+                    DeployShips();
                 }
                 else if (UtilityFunctions.IsMouseInRectangle(RANDOM_BUTTON_LEFT, TOP_BUTTONS_TOP, RANDOM_BUTTON_WIDTH, TOP_BUTTONS_HEIGHT))
                 {
@@ -119,26 +126,37 @@ namespace Battleships
             int row = 0;
             int col = 0;
 
-            row = Convert.ToInt32(Math.Floor((mouse.Y - UtilityFunctions.FIELD_TOP)/ (UtilityFunctions.CELL_HEIGHT + UtilityFunctions.CELL_GAP)));
-                   
+            row = Convert.ToInt32(Math.Floor((mouse.Y - UtilityFunctions.FIELD_TOP) / (UtilityFunctions.CELL_HEIGHT + UtilityFunctions.CELL_GAP)));
+
             col = Convert.ToInt32(Math.Floor((mouse.X - UtilityFunctions.FIELD_LEFT) / (UtilityFunctions.CELL_WIDTH + UtilityFunctions.CELL_GAP)));
+
             if (row >= 0 & row < GameController.HumanPlayer.PlayerGrid.Height)
             {
                 if (col >= 0 & col < GameController.HumanPlayer.PlayerGrid.Width)
                 {
-                    //if in the area try to deploy
-                    try
-                    {
-                        GameController.HumanPlayer.PlayerGrid.MoveShip(row, col, _selectedShip, _currentDirection);
-                    }
-                    catch (Exception ex)
-                    {
-                        Audio.PlaySoundEffect(GameResources.GameSound("Error"));
-                        UtilityFunctions.Message = ex.Message;
-                    }
+                    _currentRow = row;
+                    _currentCol = col;
+                    DeployShips();
                 }
             }
         }
+
+        public static void DeployShips()
+        {
+            //if in the area try to deploy
+            try
+            {
+               GameController.HumanPlayer.PlayerGrid.MoveShip(_currentRow, _currentCol, _selectedShip, _currentDirection);
+            }
+            catch (Exception ex)
+            {
+                    Audio.PlaySoundEffect(GameResources.GameSound("Error"));
+                    UtilityFunctions.Message = ex.Message;
+            }
+        }
+       
+
+       
 
         /// <summary>
         /// Draws the deployment screen showing the field and the ships
