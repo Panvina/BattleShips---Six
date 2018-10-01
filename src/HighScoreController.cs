@@ -118,7 +118,8 @@ namespace Battleships
             output.WriteLine(_Scores.Count);
 
             foreach (Score s in _Scores)
-            {
+            {   
+                
                 output.WriteLine(s.Value.ToString("D3") + s.Name);
     
             }
@@ -214,6 +215,10 @@ namespace Battleships
 
                 s.Name = SwinGame.TextReadAsASCII();
 
+                if (s.Name.Length < 15)
+                {
+                    s.Name = s.Name + new string(Convert.ToChar(" "), 15 - s.Name.Length);
+                }
                
 
                 _Scores.RemoveAt(_Scores.Count - 1);
