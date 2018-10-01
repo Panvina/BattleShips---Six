@@ -46,6 +46,10 @@ namespace Battleships
             NewImage("Explosion", "explosion.png");
             NewImage("Splash", "splash.png");
 
+            //You WIN
+            NewImage("YouLose", "you_lose.png");
+            NewImage("YouWin", "you_win.png");
+
         }
 
         private static void LoadSounds()

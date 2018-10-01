@@ -32,16 +32,19 @@ namespace Battleships
             toDraw.Y = 250;
             toDraw.Width = SwinGame.ScreenWidth();
             toDraw.Height = SwinGame.ScreenHeight();
-            String whatShouldIPrint = "I have long variable names";
+            //String whatShouldIPrint = "I have long variable names";
             if (GameController.HumanPlayer.IsDestroyed)
             {
-                whatShouldIPrint = "YOU LOSE!";
+                SwinGame.DrawBitmap(GameResources.GameImage("YouLose"), 350,120);
+                //whatShouldIPrint = "YOU LOSE!";
+
             }
             else
             {
-                whatShouldIPrint = "-- WINNER --";
+                //whatShouldIPrint = "-- WINNER --";
+                SwinGame.DrawBitmap(GameResources.GameImage("YouWin"), 350, 120);
             }
-            SwinGame.DrawText(whatShouldIPrint, Color.White, Color.Transparent, GameResources.GameFont("ArialLarge"), FontAlignment.AlignCenter, toDraw);
+            //SwinGame.DrawText(whatShouldIPrint, Color.White, Color.Transparent, GameResources.GameFont("ArialLarge"), FontAlignment.AlignCenter, toDraw);
         }
 
         /// <summary>
