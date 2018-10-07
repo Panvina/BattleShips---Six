@@ -304,6 +304,9 @@ namespace Battleships
                 case GameState.AlteringSettings:
                     MenuController.HandleSetupMenuInput();
                     break;
+                case GameState.AlteringColor:
+                    MenuController.HandleColorMenuInput();
+                    break;
                 case GameState.Deploying:
                     DeploymentController.HandleDeploymentInput();
                     break;
@@ -341,6 +344,9 @@ namespace Battleships
                     break;
                 case GameState.AlteringSettings:
                     MenuController.DrawSettings();
+                    break;
+                case GameState.AlteringColor:
+                    MenuController.DrawColor();
                     break;
                 case GameState.Deploying:
                     DeploymentController.DrawDeployment();

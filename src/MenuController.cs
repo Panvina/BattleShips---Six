@@ -28,7 +28,8 @@ namespace Battleships
             "PLAY",
             "SETUP",
             "SCORES",
-            "QUIT"
+            "QUIT",
+            "COLOR"
         },
         new string[] {
             "RETURN",
@@ -39,38 +40,55 @@ namespace Battleships
             "EASY",
             "MEDIUM",
             "HARD"
+        },
+        new string[] {
+            "BLUE",
+            "YELLOW",
+            "GREEN"
         }
-
     };
         private const int MENU_TOP = 575;
         private const int MENU_LEFT = 30;
         private const int MENU_GAP = 0;
+
         private const int BUTTON_WIDTH = 75;
         private const int BUTTON_HEIGHT = 15;
         private const int BUTTON_SEP = BUTTON_WIDTH + MENU_GAP;
 
         private const int TEXT_OFFSET = 0;
+
         private const int MAIN_MENU = 0;
         private const int GAME_MENU = 1;
-
         private const int SETUP_MENU = 2;
+        private const int COLOR_MENU = 3;
+
         private const int MAIN_MENU_PLAY_BUTTON = 0;
         private const int MAIN_MENU_SETUP_BUTTON = 1;
         private const int MAIN_MENU_TOP_SCORES_BUTTON = 2;
-
         private const int MAIN_MENU_QUIT_BUTTON = 3;
+        private const int MAIN_MENU_COLOR_BUTTON = 4;
+
         private const int SETUP_MENU_EASY_BUTTON = 0;
         private const int SETUP_MENU_MEDIUM_BUTTON = 1;
         private const int SETUP_MENU_HARD_BUTTON = 2;
-
         private const int SETUP_MENU_EXIT_BUTTON = 3;
+
         private const int GAME_MENU_RETURN_BUTTON = 0;
         private const int GAME_MENU_SURRENDER_BUTTON = 1;
-
         private const int GAME_MENU_QUIT_BUTTON = 2;
-        private static readonly Color MENU_COLOR = SwinGame.RGBAColor(2, 167, 252, 255);
+
+        private const int COLOR_MENU_BLUE_BUTTON = 0;
+        private const int COLOR_MENU_YELLOW_BUTTON = 1;
+        private const int COLOR_MENU_GREEN_BUTTON = 2;
+
+        private static Color COLOR_BLUE = SwinGame.RGBAColor(2, 167, 252, 255);
+        private static Color COLOR_YELLOW = SwinGame.RGBAColor(239, 239, 83, 255);
+        private static Color COLOR_GREEN = SwinGame.RGBAColor(103, 226, 72, 255);
+
+        private static Color MENU_COLOR = COLOR_BLUE;
 
         private static readonly Color HIGHLIGHT_COLOR = SwinGame.RGBAColor(1, 57, 86, 255);
+
         /// <summary>
         /// Handles the processing of user input when the main menu is showing
         /// </summary>
@@ -102,6 +120,21 @@ namespace Battleships
         public static void HandleGameMenuInput()
         {
             HandleMenuInput(GAME_MENU, 0, 0);
+        }
+
+        /// <summary>
+        /// Handles the processing of user input when the main menu is showing
+        /// Player can choose the color of the menu
+        /// </summary>
+        public static void HandleColorMenuInput()
+        {
+            bool handled = false;
+            handled = HandleMenuInput(COLOR_MENU, 1, 4);
+
+            if (!handled)
+            {
+                HandleMenuInput(MAIN_MENU, 0, 0);
+            }
         }
 
         /// <summary>
@@ -180,6 +213,23 @@ namespace Battleships
             DrawButtons(MAIN_MENU);
             DrawButtons(SETUP_MENU, 1, 1);
         }
+
+        /// <summary>
+        /// Draws the color menu to the screen.
+        /// </summary>
+        /// <remarks>
+        /// Also shows the main menu
+        /// </remarks>
+        public static void DrawColor()
+        {
+            //Clears the Screen to Black
+            //SwinGame.DrawText("Settings", Color.White, GameFont("ArialLarge"), 50, 50)
+
+            DrawButtons(MAIN_MENU);
+            DrawButtons(COLOR_MENU, 1, 4);
+    
+        }
+
 
         /// <summary>
         /// Draw the buttons associated with a top level menu.
@@ -272,6 +322,9 @@ namespace Battleships
                 case GAME_MENU:
                     PerformGameMenuAction(button);
                     break;
+                case COLOR_MENU:
+                    PerformColorMenuAction(button);
+                    break;
             }
         }
 
@@ -294,6 +347,9 @@ namespace Battleships
                     break;
                 case MAIN_MENU_QUIT_BUTTON:
                     GameController.EndCurrentState();
+                    break;
+                case MAIN_MENU_COLOR_BUTTON:
+                    GameController.AddNewState(GameState.AlteringColor);
                     break;
             }
         }
@@ -341,6 +397,28 @@ namespace Battleships
                     GameController.AddNewState(GameState.Quitting);
                     break;
             }
+        }
+
+        /// <summary>
+        /// The color menu was clicked, perform the button's action.
+        /// </summary>
+        /// <param name="button">the button pressed</param>
+        private static void PerformColorMenuAction(int button)
+        {
+            switch (button)
+            {
+                case COLOR_MENU_BLUE_BUTTON:
+                    MENU_COLOR = COLOR_BLUE;
+                    break;
+                case COLOR_MENU_YELLOW_BUTTON:
+                    MENU_COLOR = COLOR_YELLOW;
+                    break;
+                case COLOR_MENU_GREEN_BUTTON:
+                    MENU_COLOR = COLOR_GREEN;
+                    break;
+            }
+            //Always end state - handles exit button as well
+            GameController.EndCurrentState();
         }
     }
 }

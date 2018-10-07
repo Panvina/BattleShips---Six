@@ -35,6 +35,11 @@ namespace Battleships
         AlteringSettings,
 
         /// <summary>
+        /// The player is altering the color settings
+        /// </summary>
+        AlteringColor,
+
+        /// <summary>
         /// Players are deploying their ships
         /// </summary>
         Deploying,
